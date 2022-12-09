@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity{
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     button[finalI] = snapshot.getValue(String.class);
+                    buttons[finalI].setText(snapshot.getValue(String.class));
                 }
 
                 @Override
@@ -69,6 +70,24 @@ public class MainActivity extends AppCompatActivity{
                 }
             });
         }
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.child("Xwin").getValue(Boolean.class) == true) {
+                    Toast.makeText(getApplicationContext(), "X wins!", Toast.LENGTH_SHORT).show();
+                } if(snapshot.child("Owin").getValue(Boolean.class) == true) {
+                    Toast.makeText(getApplicationContext(), "O wins!", Toast.LENGTH_SHORT).show();
+                } if(snapshot.child("tie").getValue(Boolean.class) == true) {
+                    Toast.makeText(getApplicationContext(), "It's a tie!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         for(int i = 0; i < buttons.length; i++) {
             String buttonID = "btn_" + i;
@@ -128,18 +147,18 @@ public class MainActivity extends AppCompatActivity{
     private void result() {
         if(checkWinner()){
             if(playerX){
-                Toast.makeText(getApplicationContext(), "X wins!", Toast.LENGTH_SHORT).show();
+                databaseReference.child("Xwin").setValue(true);
                 startNewGame();
             }else{
-                Toast.makeText(getApplicationContext(), "O wins!", Toast.LENGTH_SHORT).show();
+                databaseReference.child("Owin").setValue(true);
                 startNewGame();
             }
         }else if(roundCount==9){
-            Toast.makeText(getApplicationContext(), "It's a tie!", Toast.LENGTH_SHORT).show();
+            databaseReference.child("tie").setValue(true);
             startNewGame();
         }else {
             playerX = !playerX;
-            databaseReference.child("playerX").setValue(false);
+            databaseReference.child("playerX").setValue(playerX);
         }
     }
 
@@ -148,6 +167,9 @@ public class MainActivity extends AppCompatActivity{
             databaseReference.child(String.valueOf(i)).setValue("");
         }
         databaseReference.child("playerX").setValue(true);
+        databaseReference.child("Xwin").setValue(false);
+        databaseReference.child("Owin").setValue(false);
+        databaseReference.child("tie").setValue(false);
     }
 
 
