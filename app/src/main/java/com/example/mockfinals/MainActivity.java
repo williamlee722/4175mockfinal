@@ -71,14 +71,38 @@ public class MainActivity extends AppCompatActivity{
             });
         }
 
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        databaseReference.child("Xwin").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.child("Xwin").getValue(Boolean.class) == true) {
                     Toast.makeText(getApplicationContext(), "X wins!", Toast.LENGTH_SHORT).show();
-                } if(snapshot.child("Owin").getValue(Boolean.class) == true) {
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        databaseReference.child("Owin").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.child("Owin").getValue(Boolean.class) == true) {
                     Toast.makeText(getApplicationContext(), "O wins!", Toast.LENGTH_SHORT).show();
-                } if(snapshot.child("tie").getValue(Boolean.class) == true) {
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        databaseReference.child("tie").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.child("tie").getValue(Boolean.class) == true) {
                     Toast.makeText(getApplicationContext(), "It's a tie!", Toast.LENGTH_SHORT).show();
                 }
             }
