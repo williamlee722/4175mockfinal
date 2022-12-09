@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity{
             });
         }
 
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        databaseReference.child("result").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.child("Xwin").getValue(Boolean.class) == true) {
@@ -152,14 +152,14 @@ public class MainActivity extends AppCompatActivity{
     private void result() {
         if(checkWinner()){
             if(playerX){
-                databaseReference.child("Xwin").setValue(true);
+                databaseReference.child("result").child("Xwin").setValue(true);
                 startNewGame();
             }else{
-                databaseReference.child("Owin").setValue(true);
+                databaseReference.child("result").child("Owin").setValue(true);
                 startNewGame();
             }
         }else if(roundCount==9){
-            databaseReference.child("tie").setValue(true);
+            databaseReference.child("result").child("tie").setValue(true);
             startNewGame();
         }else {
             playerX = !playerX;
@@ -172,9 +172,9 @@ public class MainActivity extends AppCompatActivity{
             databaseReference.child(String.valueOf(i)).setValue("");
         }
         databaseReference.child("playerX").setValue(true);
-        databaseReference.child("Xwin").setValue(false);
-        databaseReference.child("Owin").setValue(false);
-        databaseReference.child("tie").setValue(false);
+        databaseReference.child("result").child("Xwin").setValue(false);
+        databaseReference.child("result").child("Owin").setValue(false);
+        databaseReference.child("result").child("tie").setValue(false);
     }
 
 
